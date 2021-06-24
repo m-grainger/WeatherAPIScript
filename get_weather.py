@@ -8,14 +8,14 @@ import time
 # API base URL
 BASE_URL = "https://api.openweathermap.org/data/2.5/weather?"
 
-# City Name
-CITY = "Munich"
+# City ID for Portland, OR (from the tar.gz file on openweathermap.org)
+CITY_ID = "5746545"
 
 # Your API key
-API_KEY = "<enter key here>"
+API_KEY = "<api key here>"
 
 # updating the URL
-URL = BASE_URL + "q=" + CITY + "&appid=" + API_KEY
+URL = BASE_URL + "id=" + CITY_ID + "&appid=" + API_KEY
 
 print(URL)
 # Sending HTTP request
@@ -24,6 +24,10 @@ print(response.status_code)
 
 with open("weather_data.csv","a") as f:
     f.write("Time,Temp,FeelsLike,Humidity,Wind\n")
+
+def k_to_f(k_temp):
+    f_temp = round((int(k_temp) - 273.15) * 9/5 + 32, 2)
+    return f_temp
 
 def api_payload(api_data):
     # get current time
@@ -34,27 +38,16 @@ def api_payload(api_data):
     # getting temperature
     temperature = main['temp']
     # getting feel like
-    temp_feel_like = main['feels_like']  
+    temp_feels_like = main['feels_like']  
     # getting the humidity
     humidity = main['humidity']
     # wind report
     wind_report = data['wind']['speed']
     
-    '''
-    print(f"Temperature: {temperature}")
-    print(f"Feel Like: {temp_feel_like}")    
-    print(f"Humidity: {humidity}")
-    print(f"Wind Speed: {wind_report['speed']}")
-    print(f"Time Zone: {data['timezone']}")
-    '''
+    temp_int = k_to_f(temperature)
+    feels_int = k_to_f(temp_feels_like)
     
-    temp_int = int(temperature)
-    feels_int = int(temp_feel_like)
-    farenheit_temp = (temp_int - 273.15) * 9/5 + 32 
-    farenheit_feels_like = (feels_int - 273.15) * 9/5 + 32 
-    temp_int = round(farenheit_temp,2)
-    feels_int = round(farenheit_feels_like,2)
-
+    # append to csv file
     with open("weather_data.csv","a") as f:
         f.write(f'{current_time},{temp_int},{feels_int},{humidity},{wind_report}\n')
 
