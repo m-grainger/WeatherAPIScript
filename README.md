@@ -1,2 +1,3 @@
-# WeatherAPIScript
-Simple script I threw together for my Python class that logs some weather details into a CSV file every 60 seconds using the openweatherapp.org API 
+# WeatherAPIScript(s)
+
+A couple of simple scripts  I threw together for the Python Bootcamp that I run that returns some weather details to a csv file to be plotted later
